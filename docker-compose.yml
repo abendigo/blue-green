@@ -1,0 +1,42 @@
+# consul:
+#   image: progrium/consul
+#   command: -server -bootstrap -log-level debug -ui-dir /ui
+#   ports:
+#     - "8500:8500"
+#   labels:
+#     - "traefik.frontend.rule=Host:consul.localhost"
+#     - "traefik.port=8500"
+#     - "traefik.enable=true"
+
+traefik:
+  image: traefik:1.7.2-alpine
+  ports:
+    - "80:80"
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - c:/Users/mark/dev/blue-green/traefik.toml:/traefik.toml
+  labels:
+    - "traefik.frontend.rule=Host:monitor.localhost"
+    - "traefik.port=8080"
+    - "traefik.enable=true"
+  # links:
+  #   - consul
+
+# blue:
+#   image: nginx
+#   labels:
+#     - "traefik.frontend.rule=Host:blue.localhost"
+#     - "traefik.enable=true"
+
+green:
+  image: nginx
+  labels:
+    - "traefik.frontend.rule=Host:green.localhost"
+    - "traefik.frontend.auth.forward.address=http://auth.localhost/auth"
+    - "traefik.enable=true"
+
+auth:
+  image: nginx
+  labels:
+    - "traefik.frontend.rule=Host:auth.localhost"
+    - "traefik.enable=true"

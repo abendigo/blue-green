@@ -1,0 +1,22 @@
+loglevel = "DEBUG"
+
+defaultEntryPoints = ["http"]
+
+[entryPoints]
+  [entryPoints.dashboard]
+    address = ":8080"
+  [entryPoints.http]
+    address = ":80"
+
+[api]
+  entrypoint="dashboard"
+
+[docker]
+  domain = "localhost"
+  exposedByDefault = false
+  watch = true
+
+#[consul]
+#  endpoint = "consul:8500"
+#  watch = true
+#  prefix = "traefik"
